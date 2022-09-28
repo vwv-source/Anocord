@@ -149,6 +149,8 @@ a{
     font-size: 14px;
     font-weight: 700;
     margin-top: 20px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .channelbutton{
@@ -179,8 +181,8 @@ a{
     color: white;
 }
 
-.channelbutton[hidden] {
-    display: hidden;
+.channelbutton[hide] {
+    display: none;
 }
 
 .servericonimg{

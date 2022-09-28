@@ -33,6 +33,16 @@ setInterval(function(){
     })
 }, 200);
 
+$(document).on('click', '.categoryname', function(e){
+    if($(this).attr('hide') == ""){
+        console.log('hello')
+        $(this).parent().children().removeAttr('hide')
+    }else{
+        console.log('hell')
+        $(this).parent().children().attr('hide', '')
+    }
+})
+
 $(document).on('click', '.userprofileimg' ,function(e){
     profileopen = true;
     $(document.body).append(`<div class="profilepopup"> <div class="profilebackground"></div> <div class="profileimg"></div> <div class="profileimgunder"></div> <div class="profileshitcontainer"> <p class="profileusername">vewu#0288</p> <p class="profileseparator">-</p> <p class="profileaboutmetitle">About me</p> <p class="profileaboutmetext">Hey there, I develop some random web stuff. [ <a href="https://github.com/vwv-source" target="_blank">https://github.com/vwv-source</a> ]</p> </div> </div>`)
