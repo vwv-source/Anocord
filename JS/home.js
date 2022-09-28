@@ -20,6 +20,7 @@ const app = initializeApp(firebaseConfig);
 var selectedchannel = 'general';
 var shiftpressed;
 var profileopen = false;
+var settingsopen = false;
 
 setInterval(function(){ 
     const messages = ref(getDatabase(), selectedchannel)
@@ -50,8 +51,23 @@ $(document).on('click', '.userprofileimg' ,function(e){
     $('.profilepopup').css('top',e.pageY);
 })
 
+$(document).on('click', '.miniprofile' ,function(e){
+    if(profileopen){
+        profileopen = false;
+        $('.profilepopup').remove()
+        return;
+    }
+    profileopen = true;
+    $(document.body).append(`<div class="profilepopup"> <div class="profilebackground"></div> <div class="profileimg"></div> <div class="profileimgunder"></div> <div class="profileshitcontainer"> <p class="profileusername">vewu#0288</p> <p class="profileseparator">-</p> <p class="profileaboutmetitle">About me</p> <p class="profileaboutmetext">Hey there, I develop some random web stuff. [ <a href="https://github.com/vwv-source" target="_blank">https://github.com/vwv-source</a> ]</p> </div> </div>`)
+    $('.profilepopup').css('left','40px');
+    $('.profilepopup').css('bottom','80px');
+})
+
 $(document).on('click', function(e){
-    if(profileopen == true && $(e.target).is(".chatcontainer")){
+    if(settingsopen == true && $(e.target).is(".settingscontainer")){
+        settingsopen = false;
+        $(".settingscontainer").remove()
+    }else if(profileopen == true && $(e.target).is(".chatcontainer")){
         profileopen = false;
         $('.profilepopup').remove()
     }else if(profileopen == true && $(e.target).is(".messagetext")){
@@ -93,11 +109,16 @@ $("#chattextinput").on('keydown', async function (e) {
                 await get(messages).then((snapshot) => {if(!snapshot.val()){return 0}return snapshot.val().length})
             ]:$('#chattextinput').val()
         })
-        setTimeout(function(){$('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight);}, 200);
+        setTimeout(function(){$('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight);}, 500);
         $('#chattextinput').val('');
         
     }
 });
+
+$('.minicog').on('click', function(e){
+    settingsopen = true;
+    $(document.body).append(`<div class="settingscontainer"> <div class="settingswindow"> <div class="settingssidebar"> <p class="settingcategorytitle">user settings</p> <input type="button" value="My Account" class="settingbutton" style="color: white;background-color: rgba(77, 77, 77, 0.377);box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.274);cursor: pointer;"> <input type="button" value="Profiles" class="settingbutton"> <p class="settingseparator">-</p> <p class="settingcategorytitle">app settings</p> <input type="button" value="Appearence" class="settingbutton"> <p class="settingseparator">-</p> <p class="settingcategorytitle">Activity</p> <input type="button" value="What's New" class="settingbutton"> <input type="button" value="Log Out" class="settingbutton"> </div> </div> </div>`)
+})
 
 function guidGenerator() {
     var S4 = function() {

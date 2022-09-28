@@ -5,16 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="CSS/home.css">
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <title>Anocord</title>
 </head>
 <body>
+    <!-- <div class="settingscontainer">
+        <div class="settingswindow">
+            <div class="settingssidebar">
+                <p class="settingcategorytitle">user settings</p>
+                <input type="button" value="My Account" class="settingbutton" style="color: white;background-color: rgba(77, 77, 77, 0.377);box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.274);cursor: pointer;">
+                <input type="button" value="Profiles" class="settingbutton">
+                <p class="settingseparator">-</p>
+                <p class="settingcategorytitle">app settings</p>
+                <input type="button" value="Appearence" class="settingbutton">
+                <p class="settingseparator">-</p>
+                <p class="settingcategorytitle">Activity</p>
+                <input type="button" value="What's New" class="settingbutton">
+                <input type="button" value="Log Out" class="settingbutton">
+            </div>
+        </div>
+    </div> -->
+
     <div class="sidebar">
+        <div class="servericonimg" style="background-color: rgb(65, 65, 65);"></div>
+        <p class="splitbar">-</p>
         <div class="servericonimg"></div>
         <div class="servericonimg" style="background-color: orange;"></div>
         <p class="splitbar">-</p>
         <input type="button" value="+" class="createserverbutton">
     </div>
-
     <div class="channelsidebar">
         <p class="servernametext">Anocord Server</p>
         <div class="channelcategorycontainer">
@@ -22,6 +41,7 @@
                 <p class="categoryname">▾ Announcements and news</p>
                 <input type="button" value="# rules" channelid="rules" class="channelbutton">
                 <input type="button" value="# useful-info" channelid="useful-info" class="channelbutton">
+                <input type="button" value="# projects" channelid="projects" class="channelbutton">
                 <input type="button" value="# announcements" channelid="announcements" class="channelbutton">
             </div>
             <div class="channelcategory">
@@ -32,6 +52,12 @@
             </div>
         </div>
     </div>
+    <div class="profileminibar">
+        <div class="miniprofile"></div>
+        <p class="miniusername">vewu</p>
+        <p class="miniusertag">#0288</p>
+        <input type="button" class="minicog" value="⚙️">
+    </div>
 
     <div class="chatcontainer">
         <div class="messagecontainer">
@@ -41,8 +67,7 @@
     <div class="chatcontainer2">
         <textarea id="chattextinput" cols="30" rows="10" placeholder="Type here to message."></textarea>
         <!-- <input type="text" id="chattextinput" placeholder="Type here to message."> -->
-    </div>
-    
+    </div>    
 </body>
 <script src="JS/home.js" type="module"></script>
 </html>
