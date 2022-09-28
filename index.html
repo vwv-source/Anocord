@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/home.css">
+    <title>Anocord</title>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="servericonimg"></div>
+        <div class="servericonimg" style="background-color: orange;"></div>
+        <p class="splitbar">-</p>
+        <input type="button" value="+" class="createserverbutton">
+    </div>
+
+    <div class="channelsidebar">
+        <p class="servernametext">Anocord Server</p>
+        <div class="channelcategorycontainer">
+            <div class="channelcategory">
+                <p class="categoryname">▾ Announcements and news</p>
+                <input type="button" value="# rules" channelid="rules" class="channelbutton">
+                <input type="button" value="# useful-info" channelid="useful-info" class="channelbutton">
+                <input type="button" value="# announcements" channelid="announcements" class="channelbutton">
+            </div>
+            <div class="channelcategory">
+                <p class="categoryname">▾ General</p>
+                <input type="button" value="# general" channelid="general" class="channelbutton" selected>
+                <input type="button" value="# help" channelid="help" class="channelbutton">
+                <input type="button" value="# off-topic" channelid="off-topic" class="channelbutton">
+            </div>
+        </div>
+    </div>
+
+    <div class="chatcontainer">
+        <div class="messagecontainer">
+        </div>
+    </div>
+
+    <div class="chatcontainer2">
+        <textarea id="chattextinput" cols="30" rows="10" placeholder="Type here to message."></textarea>
+        <!-- <input type="text" id="chattextinput" placeholder="Type here to message."> -->
+    </div>
+    
+</body>
+<script src="JS/home.js" type="module"></script>
+</html>
