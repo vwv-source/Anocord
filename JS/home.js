@@ -113,7 +113,7 @@ $("#chattextinput").on('keydown', async function (e) {
             var reader = new FileReader();
             reader.onloadend = function() {
                 image = reader.result;
-                console.log(image);
+                console.log(image)
             }
             reader.readAsDataURL($('.imageupbutton').prop("files")[0]);
         }
