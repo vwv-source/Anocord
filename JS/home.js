@@ -59,7 +59,7 @@ $(document).on('click', '.categoryname', function(e){
 
 $(document).on('click', '.userprofileimg' ,function(e){
     profileopen = true;
-    $(document.body).append(`<div class="profilepopup"> <div class="profilebackground"></div> <div class="profileimg"></div> <div class="profileimgunder"></div> <div class="profileshitcontainer"> <p class="profileusername">vewu#0288</p> <p class="profileseparator">-</p> <p class="profileaboutmetitle">About me</p> <p class="profileaboutmetext">Hey there, I develop some random web stuff. [ <a href="https://github.com/vwv-source" target="_blank">https://github.com/vwv-source</a> ]</p> </div> </div>`)
+    $(document.body).append(`<div class="profilepopup"> <div class="profilebackground" style="background-color: ${$(this).css('background-color')};"></div> <div class="profileimg" style="background-color: ${$(this).css('background-color')};"></div> <div class="profileimgunder"></div> <div class="profileshitcontainer"> <p class="profileusername">${$(this).parent().find('.username').text().replace(/\s/g, '')}#0288</p> <p class="profileseparator">-</p> <p class="profileaboutmetitle">About me</p> <p class="profileaboutmetext"></p> </div> </div>`)
     $('.profilepopup').css('left',e.pageX);
     $('.profilepopup').css('top',e.pageY);
 })
@@ -71,7 +71,7 @@ $(document).on('click', '.miniprofile' ,function(e){
         return;
     }
     profileopen = true;
-    $(document.body).append(`<div class="profilepopup"> <div class="profilebackground"></div> <div class="profileimg"></div> <div class="profileimgunder"></div> <div class="profileshitcontainer"> <p class="profileusername">vewu#0288</p> <p class="profileseparator">-</p> <p class="profileaboutmetitle">About me</p> <p class="profileaboutmetext">Hey there, I develop some random web stuff. [ <a href="https://github.com/vwv-source" target="_blank">https://github.com/vwv-source</a> ]</p> </div> </div>`)
+    $(document.body).append(`<div class="profilepopup"> <div class="profilebackground" style="background-color: ${getCookie('profilecolor')};"></div> <div class="profileimg" style="background-color: ${getCookie('profilecolor')};"></div> <div class="profileimgunder"></div> <div class="profileshitcontainer"> <p class="profileusername">${getCookie('username')}#0288</p> <p class="profileseparator">-</p> <p class="profileaboutmetitle">About me</p> <p class="profileaboutmetext"></p> </div> </div>`)
     $('.profilepopup').css('left','40px');
     $('.profilepopup').css('bottom','80px');
 })
@@ -99,6 +99,7 @@ $('.channelbutton').on('click', function(e){
     $('.channelbutton[selected]').removeAttr('selected')
     $(this).attr('selected', '');
     selectedchannel = $(this).attr('channelid')
+    setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 1000);
 })
 
 $("#chattextinput").on('keyup', async function (e) {
@@ -127,10 +128,7 @@ $("#chattextinput").on('keydown', async function (e) {
             }
             reader.readAsDataURL($('.imageupbutton').prop("files")[0]);
         }
-        if( /^\s*$/.test($('#chattextinput').val())){
-            return
-        }
-        if($('.imageupbutton').prop("files").length == 0){
+        if($('.imageupbutton').prop("files").length == 0 && !/^\s*$/.test($('#chattextinput').val())){
             const messages = ref(getDatabase(), selectedchannel)
             const chat = ref(getDatabase(), selectedchannel)
             update(chat,
@@ -139,7 +137,7 @@ $("#chattextinput").on('keydown', async function (e) {
                         await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
                     ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">${utcDate.getUTCHours()+':'+utcDate.getUTCMinutes()}</p><br><br><p class="messagetext">${$('#chattextinput').val()} </p></div>`
                 })
-            setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
+            setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 1000);
             $('#chattextinput').val('');
         }else if($('.imageupbutton').val()){
             const messages = ref(getDatabase(), selectedchannel)
@@ -150,7 +148,7 @@ $("#chattextinput").on('keydown', async function (e) {
                         await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
                     ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">${utcDate.getUTCHours()+':'+utcDate.getUTCMinutes()}</p><br><br><p class="messagetext">${$('#chattextinput').val()} <br><img src="${image}"></p></div>`
                 })
-            setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
+            setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 1000);
             $('label').css('color','white')
             $('.imageupbutton').val('');
             $('#chattextinput').val('');
@@ -172,7 +170,7 @@ $(document).on('click','.settingbutton', function(e){
     $(".settingwindowcontainer").empty();
     if($(this).attr('settingname') == 'appearence' && currentsettingmenu != 'appearence'){
         currentsettingmenu = 'appearence'
-        $(".settingwindowcontainer").append(`<p class="settingtitle">Appearence</p> <div class="messagepreviewcontainer"> <div class="message"> <div class="userprofileimg"></div> <p class="username">vewu</p> <p class="time">15:00</p><br><br> <p class="messagetext">Look at me, I'm a beautiful butterfly<br>Fluttering in the moonlight 🙂</p> </div> </div> <p class="settingtitle">Colors</p> <p class="innersettingtitle">Color Accent</p> <input class="settingcolormeter" id="color" type="range" min="0" max="255" step="1" value="0"> <p class="innersettingtitle">Color Saturation</p> <input class="settingcolormeter" id="saturation" type="range" min="0" max="15" step="1" value="0"><br> <p class="settingtitle">Chat</p> <p class="innersettingtitle">Chat Font Scaling (experimental)</p> <input class="settingrangemeter" id="chatfontscale" type="range" min="12" max="25" step="1" value="0">`)
+        $(".settingwindowcontainer").append(`<p class="settingtitle">Appearence</p> <div class="messagepreviewcontainer"> <div class="message"> <div class="userprofileimg" style="background-color: ${getCookie('profilecolor')};"></div> <p class="username">${getCookie('username')}</p> <p class="time">15:00</p><br><br> <p class="messagetext">Look at me, I'm a beautiful butterfly<br>Fluttering in the moonlight 🙂</p> </div> </div> <p class="settingtitle">Colors</p> <p class="innersettingtitle">Color Accent</p> <input class="settingcolormeter" id="color" type="range" min="0" max="255" step="1" value="0"> <p class="innersettingtitle">Color Saturation</p> <input class="settingcolormeter" id="saturation" type="range" min="0" max="15" step="1" value="0"><br> <p class="settingtitle">Chat</p> <p class="innersettingtitle">Chat Font Scaling (experimental)</p> <input class="settingrangemeter" id="chatfontscale" type="range" min="12" max="25" step="1" value="0">`)
         return;
     }
     currentsettingmenu = $(this).attr('settingname');
@@ -202,6 +200,11 @@ $(document).on('click','.settingcolormeter', function () {
 $('.imageupbutton').on('change', function() {
     $('label').css('color','greenyellow')
 });
+
+if(getCookie("username") && getCookie("profilecolor")){
+    $('.miniprofile').css('background-color', getCookie('profilecolor'))
+    $('.miniusername').text(getCookie('username'))
+}
 
 function getCookie(cname) {
     let name = cname + "=";
