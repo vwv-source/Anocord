@@ -21,24 +21,32 @@ var selectedchannel = 'general';
 var shiftpressed;
 var profileopen = false;
 var settingsopen = false;
+var firstnames =  ["Adam", "Alex", "Aaron", "Ben", "Carl", "Dan", "David", "Edward", "Fred", "Frank", "George", "Hal", "Hank", "Ike", "John", "Jack", "Joe", "Larry", "Monte", "Matthew", "Mark", "Nathan", "Otto", "Paul", "Peter", "Roger", "Roger", "Steve", "Thomas", "Tim", "Ty", "Victor", "Walter"];
+var lastnames = ["Chopper","Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd", "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch", "Hoffman", "Kassing", "Knutson", "Lawless", "Lawicki", "Mccord", "McCormack", "Miller", "Myers", "Nugent", "Ortiz", "Orwig", "Ory", "Paiser", "Pak", "Pettigrew", "Quinn", "Quizoz", "Ramachandran", "Resnick", "Sagar", "Schickowski", "Schiebel", "Sellon", "Severson", "Shaffer", "Solberg", "Soloman", "Sonderling", "Soukup", "Soulis", "Stahl", "Sweeney", "Tandy", "Trebil", "Trusela", "Trussel", "Turco", "Uddin", "Uflan", "Ulrich", "Upson", "Vader", "Vail", "Valente", "Van Zandt", "Vanderpoel", "Ventotla", "Vogal", "Wagle", "Wagner", "Wakefield", "Weinstein", "Weiss", "Woo", "Yang", "Yates", "Yocum", "Zeaser", "Zeller", "Ziegler", "Bauer", "Baxster", "Casal", "Cataldi", "Caswell", "Celedon", "Chambers", "Chapman", "Christensen", "Darnell", "Davidson", "Davis", "DeLorenzo", "Dinkins", "Doran", "Dugelman", "Dugan", "Duffman", "Eastman", "Ferro", "Ferry", "Fletcher", "Fietzer", "Hylan", "Hydinger", "Illingsworth", "Ingram", "Irwin", "Jagtap", "Jenson", "Johnson", "Johnsen", "Jones", "Jurgenson", "Kalleg", "Kaskel", "Keller", "Leisinger", "LePage", "Lewis", "Linde", "Lulloff", "Maki", "Martin", "McGinnis", "Mills", "Moody", "Moore", "Napier", "Nelson", "Norquist", "Nuttle", "Olson", "Ostrander", "Reamer", "Reardon", "Reyes", "Rice", "Ripka", "Roberts", "Rogers", "Root", "Sandstrom", "Sawyer", "Schlicht", "Schmitt", "Schwager", "Schutz", "Schuster", "Tapia", "Thompson", "Tiernan", "Tisler" ];
+var profilecolors = ["palegreen","palegoldenrod","paleturquoise","palevioletred","coral","dodgerblue","mediumpurple","mediumseagreen"];
 var currentsettingmenu;
 
-setInterval(function(){ 
-    const messages = ref(getDatabase(), selectedchannel)
-    get(messages).then((snapshot) => {
-        var snapshot = snapshot.val();
-        if(!snapshot){
-            return;
-        }else if($('.messagecontainer').children().length == snapshot.length || !snapshot){
-            return;
-        }else{
+if(!getCookie("username") || !getCookie("profilecolor")){
+    document.cookie = `username=${firstnames[Math.floor(Math.random() * firstnames.length)]} ${lastnames[Math.floor(Math.random() * lastnames.length)]}; expires=Thu, 18 Dec 2038 12:00:00 UTC`;
+    document.cookie = `profilecolor=${profilecolors[Math.floor(Math.random() * profilecolors.length)]}; expires=Thu, 18 Dec 2038 12:00:00 UTC`;
+}
+
+setInterval(async function(){ 
+    if (await $.getJSON(`https://anocord-5d60a-default-rtdb.firebaseio.com/${selectedchannel}.json?shallow=true`) == null){
+        return
+    }else if(Object.keys(await $.getJSON(`https://anocord-5d60a-default-rtdb.firebaseio.com/${selectedchannel}.json?shallow=true`)).length == $('.messagecontainer').children().length){
+        return
+    }else{
+        const messages = ref(getDatabase(), selectedchannel)
+        get(messages).then((snapshot) =>  {
+            snapshot = snapshot.val()
             $('.messagecontainer').empty();
-            for(let index in snapshot){
+            for (let index in snapshot) {
                 var element = snapshot[index];
-                $('.messagecontainer').append(`<div class="message"> <div class="userprofileimg"></div><p class="username">Anonymous</p><p class="time">15:00</p><br><br><p class="messagetext">${element}</p></div>`)
+                $('.messagecontainer').append(element)
             }
-        }
-    })
+        })
+    }
 }, 200);
 
 $(document).on('click', '.categoryname', function(e){
@@ -109,7 +117,8 @@ $("#chattextinput").on('keydown', async function (e) {
     if (e.key == 'Enter' || e.keyCode == 13) {
         e.preventDefault();
         var image;
-        if ($('.imageupbutton').prop("files") && $('.imageupbutton').prop("files")[0]) {
+        var imageList = $('.imageupbutton').prop("files");
+        if (imageList && imageList[0]) {
             var reader = new FileReader();
             reader.onloadend = function() {
                 image = reader.result;
@@ -119,16 +128,29 @@ $("#chattextinput").on('keydown', async function (e) {
         }
         if( /^\s*$/.test($('#chattextinput').val())){
             return
-        }else{
+        }
+        if($('.imageupbutton').prop("files").length == 0){
             const messages = ref(getDatabase(), selectedchannel)
             const chat = ref(getDatabase(), selectedchannel)
             update(chat,
                 {
                     [
                         await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
-                    ]: `${$('#chattextinput').val()}`/*  <br><img src="${image}"> `*/
+                    ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">15:00</p><br><br><p class="messagetext">${$('#chattextinput').val()} </p></div>`
                 })
             setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
+            $('#chattextinput').val('');
+        }else if($('.imageupbutton').val()){
+            const messages = ref(getDatabase(), selectedchannel)
+            const chat = ref(getDatabase(), selectedchannel)
+            update(chat,
+                {
+                    [
+                        await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
+                    ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">15:00</p><br><br><p class="messagetext">${$('#chattextinput').val()} <br><img src="${image}"></p></div>`
+                })
+            setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
+            $('.imageupbutton').val('');
             $('#chattextinput').val('');
         }
         
@@ -189,9 +211,38 @@ $('.imageupbutton').on('change', function() {
 
 //image wizardry
 
-function guidGenerator() {
-    var S4 = function() {
-       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    };
-    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+}
+
+function parseURLParams(url) {
+    var queryStart = url.indexOf("?") + 1,
+        queryEnd   = url.indexOf("#") + 1 || url.length + 1,
+        query = url.slice(queryStart, queryEnd - 1),
+        pairs = query.replace(/\+/g, " ").split("&"),
+        parms = {}, i, n, v, nv;
+
+    if (query === url || query === "") return;
+
+    for (i = 0; i < pairs.length; i++) {
+        nv = pairs[i].split("=", 2);
+        n = decodeURIComponent(nv[0]);
+        v = decodeURIComponent(nv[1]);
+
+        if (!parms.hasOwnProperty(n)) parms[n] = [];
+        parms[n].push(nv.length === 2 ? v : null);
+    }
+    return parms;
 }

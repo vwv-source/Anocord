@@ -10,7 +10,7 @@
 :root {
     --messegefontsize:16px;
     --accentsaturation:0%;
-    --accentcolor:80;
+    --accentcolor:200;
 }
 
 body{
@@ -36,7 +36,7 @@ a{
 }
 
 .message .userprofileimg{
-    background-color: palegreen;
+    background-color: greenyellow;
     width: 45px;
     height: 45px;
     border-radius: 50%;
