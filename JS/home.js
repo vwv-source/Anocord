@@ -35,7 +35,7 @@ setInterval(function(){
             $('.messagecontainer').empty();
             for(let index in snapshot){
                 var element = snapshot[index];
-                $('.messagecontainer').append(`<div class="message"> <div class="userprofileimg"></div><p class="username">vewu</p><p class="time">15:00</p><br><br><p class="messagetext">${element}</p></div>`)
+                $('.messagecontainer').append(`<div class="message"> <div class="userprofileimg"></div><p class="username">Anonymous</p><p class="time">15:00</p><br><br><p class="messagetext">${element}</p></div>`)
             }
         }
     })
@@ -123,7 +123,7 @@ $("#chattextinput").on('keydown', async function (e) {
             {
                 [
                     await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
-                ]: `${$('#chattextinput').val()} <br><img src="${image}">`
+                ]: `${$('#chattextinput').val()}`/*  <br><img src="${image}"> `*/
             })
         setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
         $('#chattextinput').val('');
