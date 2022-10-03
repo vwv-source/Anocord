@@ -117,16 +117,21 @@ $("#chattextinput").on('keydown', async function (e) {
             }
             reader.readAsDataURL($('.imageupbutton').prop("files")[0]);
         }
-        const messages = ref(getDatabase(), selectedchannel)
-        const chat = ref(getDatabase(), selectedchannel)
-        update(chat,
-            {
-                [
-                    await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
-                ]: `${$('#chattextinput').val()}`/*  <br><img src="${image}"> `*/
-            })
-        setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
-        $('#chattextinput').val('');
+        if( /^\s*$/.test($('#chattextinput').val())){
+            return
+        }else{
+            const messages = ref(getDatabase(), selectedchannel)
+            const chat = ref(getDatabase(), selectedchannel)
+            update(chat,
+                {
+                    [
+                        await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
+                    ]: `${$('#chattextinput').val()}`/*  <br><img src="${image}"> `*/
+                })
+            setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
+            $('#chattextinput').val('');
+        }
+        
     }
 });
 
