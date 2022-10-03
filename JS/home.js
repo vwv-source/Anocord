@@ -116,6 +116,7 @@ $("#chattextinput").on('keydown', async function (e) {
     }else
     if (e.key == 'Enter' || e.keyCode == 13) {
         e.preventDefault();
+        var utcDate = new Date();
         var image;
         var imageList = $('.imageupbutton').prop("files");
         if (imageList && imageList[0]) {
@@ -136,7 +137,7 @@ $("#chattextinput").on('keydown', async function (e) {
                 {
                     [
                         await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
-                    ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">15:00</p><br><br><p class="messagetext">${$('#chattextinput').val()} </p></div>`
+                    ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">${utcDate.getUTCHours()+':'+utcDate.getUTCMinutes()}</p><br><br><p class="messagetext">${$('#chattextinput').val()} </p></div>`
                 })
             setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
             $('#chattextinput').val('');
@@ -147,9 +148,10 @@ $("#chattextinput").on('keydown', async function (e) {
                 {
                     [
                         await get(messages).then((snapshot) => { if (!snapshot.val()) { return 0 } return snapshot.val().length })
-                    ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">15:00</p><br><br><p class="messagetext">${$('#chattextinput').val()} <br><img src="${image}"></p></div>`
+                    ]: `<div class="message"> <div class="userprofileimg" style="background-color:${getCookie('profilecolor')};"></div><p class="username">${getCookie('username')}</p><p class="time">${utcDate.getUTCHours()+':'+utcDate.getUTCMinutes()}</p><br><br><p class="messagetext">${$('#chattextinput').val()} <br><img src="${image}"></p></div>`
                 })
             setTimeout(function () { $('.chatcontainer').scrollTop($('.chatcontainer')[0].scrollHeight); }, 500);
+            $('label').css('color','white')
             $('.imageupbutton').val('');
             $('#chattextinput').val('');
         }
@@ -197,19 +199,9 @@ $(document).on('click','.settingcolormeter', function () {
 
 //setttings bs
 
-//image wizardry
-
 $('.imageupbutton').on('change', function() {
-    if ($('.imageupbutton').prop("files") && $('.imageupbutton').prop("files")[0]) {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            console.log(reader.result)
-        }
-        reader.readAsDataURL($('.imageupbutton').prop("files")[0]);
-    }
+    $('label').css('color','greenyellow')
 });
-
-//image wizardry
 
 function getCookie(cname) {
     let name = cname + "=";
@@ -225,24 +217,4 @@ function getCookie(cname) {
       }
     }
     return "";
-}
-
-function parseURLParams(url) {
-    var queryStart = url.indexOf("?") + 1,
-        queryEnd   = url.indexOf("#") + 1 || url.length + 1,
-        query = url.slice(queryStart, queryEnd - 1),
-        pairs = query.replace(/\+/g, " ").split("&"),
-        parms = {}, i, n, v, nv;
-
-    if (query === url || query === "") return;
-
-    for (i = 0; i < pairs.length; i++) {
-        nv = pairs[i].split("=", 2);
-        n = decodeURIComponent(nv[0]);
-        v = decodeURIComponent(nv[1]);
-
-        if (!parms.hasOwnProperty(n)) parms[n] = [];
-        parms[n].push(nv.length === 2 ? v : null);
-    }
-    return parms;
 }

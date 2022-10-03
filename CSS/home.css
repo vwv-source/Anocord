@@ -46,15 +46,16 @@ a{
 }
 
 .message .time{
-    font-size: small;
+    font-size: 13px;
     font-weight: 700;
-    font-family: 'Gill Sans MT';
+    line-height: 14px;
+    font-family: 'Segoe UI';
     color: hsl(var(--accentcolor),var(--accentsaturation),35%);
 
     float: left;
     position: relative;
     bottom: 12px;
-    left: 17px;
+    left: 15px;
 }
 
 .message p{
@@ -133,18 +134,17 @@ a{
 
 
 #chattextinput{
-    position:absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-
+    position: relative;
+    align-self: flex-end;
+    margin-left: 75px;
+    margin-right: 10px;
+    margin-bottom: 16px;
     background-color: hsl(var(--accentcolor),var(--accentsaturation),15%);
     border: none;
     padding: 10px;
     padding-top: 13px;
     padding-left: 20px;
     border-radius: 10px;
-    width: 98%;
     height: 50px;
     font-size: 17px;
     font-weight: 500;
@@ -153,6 +153,7 @@ a{
     pointer-events:all;
     resize: none;
     vertical-align: middle;
+    width: 100%;
 }
 
 #chattextinput:focus{
@@ -559,4 +560,31 @@ a{
         transform: scale(1) translate(-50%, -50%);
         transform-origin: 0 0;
     }
+}
+
+input[type=file]{
+    visibility:hidden;
+    position: absolute;
+}
+
+.chatcontainer2 label{
+    cursor: pointer;
+    background-color: #252525;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    z-index: 10;
+    vertical-align: middle;
+    line-height: 45px;
+    font-size: 30px;
+    font-weight: 5000;
+    border-radius: 10px;
+    pointer-events: all;
+}
+
+.chatcontainer2{
+    display: flex;
 }
